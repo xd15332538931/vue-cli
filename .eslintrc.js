@@ -29,6 +29,5 @@ module.exports = {
     "rules": {
         "@typescript-eslint/no-var-requires": 0,
         "no-console": "error",// 打开console,
-        "@typescript-eslint/camelcase": "off",
     }
 }
