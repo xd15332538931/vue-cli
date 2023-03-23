@@ -2,11 +2,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from "./router"
-import {a,sum} from './test'
+// import {a,sum} from './test'
 Vue.config.productionTip = false
-console.log('a',a)
-const result=sum(2,3)
-console.log('result',result)
+// const result=sum(2,3)
 
 
 new Vue({
