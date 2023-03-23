@@ -3,18 +3,18 @@ import Router from "vue-router";
 
 Vue.use(Router);
 
-let routes = [];
+const routes = [];
 // 登录
 const loginRoute = {
   path: "/login",
   name: "Login",
-  component: () => import('../common/loginPage') 
+  component: () => import('../common/loginPage.vue') 
 };
 // 首页
 const mainRoute = {
   path: "/main",
   name: "Main",
-  component: () => import('../common/mainPage') ,
+  component: () => import('../common/mainPage.vue') ,
 };
 
 routes.push(loginRoute, mainRoute);

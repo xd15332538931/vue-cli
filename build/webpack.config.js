@@ -3,12 +3,13 @@ const htmlWebpackPlugin = require('html-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin'); // vue-loader编译vue文件
 const ProgressBarWebpackPlugin = require('progress-bar-webpack-plugin') // 设置打包进度条
 const Dotenv = require('dotenv-webpack'); // 支持程序获取.env配置的环境变量
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 console.log('222', process.env.NODE_ENV)
 module.exports = {
     mode: process.env.NODE_ENV === 'prod' ? "production" : "development",                     // 开发模式
-    entry: './src/main.js',                   // 入口文件，把src下的main.js编译到出口文件
+    entry: './src/main.ts',                   // 入口文件，把src下的main.js编译到出口文件
     output: {                                 // 出口文件
-        path: path.resolve(__dirname, 'dist'),   // 出口路径和目录
+        path: path.resolve(__dirname, '../dist'), // 出口路径和目录
         filename: "[name].js",                 // 编译后的名称
     },
     plugins: [
@@ -25,7 +26,16 @@ module.exports = {
                 complete: "█",
                 clear: true
             }
-        )
+        ),
+        new ForkTsCheckerWebpackPlugin({
+            async: false,
+            typescript: {
+                // 提供对 .vue 单文件的检测支持
+                extensions: {
+                    vue: true,
+                },
+            }
+        })
     ],
     optimization: {
         nodeEnv: false
@@ -78,20 +88,31 @@ module.exports = {
                     filename: 'media/[base]',
                 },
             },
+            // {
+            //     test: /\.(ts|js)x?$/,
+            //     use: [
+            //         'babel-loader',
+            //     ],
+            //     exclude: /node_modules/
+            // },
             {
-                test: /\.(ts|js)x?$/,
-                use: [
-                    'babel-loader',
-                ],
-                exclude: /node_modules/
+                // 解析 ts 与 tsx 文件
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
+                exclude: /node_modules/,
+                options: {
+                    transpileOnly: true,
+                    appendTsSuffixTo: [/\.vue$/],
+                    happyPackMode: false,
+                },
             },
         ]
     },
     resolve: {  // 此配置用在引用文件时
-        extensions: ['.js', '.vue', '.json'],  // 引入路径是不用写对应的后缀名
+        extensions: [".js", ".tsx", ".ts", ".vue"],
         alias: {
             // 'vue$': 'vue/dist/vue.esm.js',        // 正在使用的是vue的运行时版本，而此版本中的编译器是不可用的，我们需要把它切换成运行时 + 编译的版本
-            '@': path.resolve(__dirname, '../src'), // 用@直接指引到src目录下
+            '@': path.resolve(__dirname, "../src"), // 用@直接指引到src目录下
         }
     },
 
